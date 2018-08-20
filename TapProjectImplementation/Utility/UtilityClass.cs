@@ -24,7 +24,7 @@ namespace Utility
 
         public static void CheckConnectionStringLength(string s)
         {
-            if(s.Length > DomainConstraints.ConnectionStringMaxLength || s.Length < DomainConstraints.ConnectionStringMinLength)
+            if (s.Length > DomainConstraints.ConnectionStringMaxLength || s.Length < DomainConstraints.ConnectionStringMinLength)
                 throw new ArgumentException();
         }
     }

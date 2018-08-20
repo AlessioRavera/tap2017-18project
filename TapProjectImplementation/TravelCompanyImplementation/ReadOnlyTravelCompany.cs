@@ -9,7 +9,7 @@ using TAP2017_2018_TravelCompanyInterface;
 
 namespace TravelCompanyImplementation
 {
-    class ReadOnlyTravelCompany : IReadOnlyTravelCompany
+    public class ReadOnlyTravelCompany : IReadOnlyTravelCompany
     {
         public ReadOnlyCollection<ILegDTO> FindLegs(Expression<Func<ILegDTO, bool>> predicate)
         {

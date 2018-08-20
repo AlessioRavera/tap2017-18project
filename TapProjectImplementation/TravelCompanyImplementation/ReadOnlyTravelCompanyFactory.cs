@@ -7,7 +7,7 @@ using TAP2017_2018_TravelCompanyInterface;
 
 namespace TravelCompanyImplementation
 {
-    class ReadOnlyTravelCompanyFactory : IReadOnlyTravelCompanyFactory
+    public class ReadOnlyTravelCompanyFactory : IReadOnlyTravelCompanyFactory
     {
         public IReadOnlyTravelCompany Get(string name)
         {

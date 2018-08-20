@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Security;
 using System.Text;
@@ -14,6 +15,9 @@ namespace TravelCompanyImplementation
     public class TravelCompanyBindings : NinjectModule
     {
         [SecurityCritical]
-        public override void Load() => Bind<ITravelCompanyBrokerFactory>().To<TravelCompanyBrokerFactory>();
+        public override void Load()
+        {
+            Bind<ITravelCompanyBrokerFactory>().To<TravelCompanyBrokerFactory>();
+        }
     }
 }

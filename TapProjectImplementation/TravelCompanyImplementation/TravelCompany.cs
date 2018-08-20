@@ -7,7 +7,7 @@ using TAP2017_2018_TravelCompanyInterface;
 
 namespace TravelCompanyImplementation
 {
-    class TravelCompany : ITravelCompany
+    public class TravelCompany : ITravelCompany
     {
         public int CreateLeg(string @from, string to, int cost, int distance, TransportType transportType)
         {

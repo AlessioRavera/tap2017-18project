@@ -8,8 +8,15 @@ using TAP2017_2018_TravelCompanyInterface;
 
 namespace TravelCompanyImplementation
 {
-    class TravelCompanyBroker : ITravelCompanyBroker
+    public class TravelCompanyBroker : ITravelCompanyBroker
     {
+        private string dbConnectionString;
+
+        public TravelCompanyBroker(string dbConnectionString)
+        {
+            this.dbConnectionString = dbConnectionString;
+        }
+
         public ITravelCompanyFactory GetTravelCompanyFactory()
         {
             throw new NotImplementedException();
@@ -23,6 +30,23 @@ namespace TravelCompanyImplementation
         public ReadOnlyCollection<string> KnownTravelCompanies()
         {
             throw new NotImplementedException();
+        }
+
+        public override bool Equals(object obj)
+        {
+            var item = obj as TravelCompanyBroker;
+
+            if (item == null)
+            {
+                return false;
+            }
+
+            return this.dbConnectionString.Equals(item.dbConnectionString);
+        }
+
+        public override int GetHashCode()
+        {
+            return this.dbConnectionString.GetHashCode();
         }
     }
 }
