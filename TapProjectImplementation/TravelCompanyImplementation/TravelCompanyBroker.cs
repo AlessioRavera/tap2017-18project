@@ -10,7 +10,7 @@ namespace TravelCompanyImplementation
 {
     public class TravelCompanyBroker : ITravelCompanyBroker
     {
-        private string dbConnectionString;
+        private readonly string dbConnectionString;
 
         public TravelCompanyBroker(string dbConnectionString)
         {
@@ -19,17 +19,25 @@ namespace TravelCompanyImplementation
 
         public ITravelCompanyFactory GetTravelCompanyFactory()
         {
-            throw new NotImplementedException();
+            return new TravelCompanyFactory(dbConnectionString);
         }
 
         public IReadOnlyTravelCompanyFactory GetReadOnlyTravelCompanyFactory()
         {
-            throw new NotImplementedException();
+            return new ReadOnlyTravelCompanyFactory(dbConnectionString);
         }
 
         public ReadOnlyCollection<string> KnownTravelCompanies()
         {
-            throw new NotImplementedException();
+            using (var brokerDBContext = new TravelCompanyBrokerContext(dbConnectionString))
+            {
+                List<string> travelCompanies = new List<string>();
+                var query = from tc in brokerDBContext.travelCompanies
+                    select tc.TravelCompanyName;
+                foreach (var item in query)
+                    travelCompanies.Add(item);
+                return new ReadOnlyCollection<string>(travelCompanies);
+            }
         }
 
         public override bool Equals(object obj)

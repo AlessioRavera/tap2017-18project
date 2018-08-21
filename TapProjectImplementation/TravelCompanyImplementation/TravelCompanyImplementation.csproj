@@ -53,6 +53,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="LegDB.cs" />
+    <Compile Include="TravelCompanyContext.cs" />
     <Compile Include="TravelCompanyDB.cs" />
     <Compile Include="ReadOnlyTravelCompany.cs" />
     <Compile Include="TravelCompany.cs" />

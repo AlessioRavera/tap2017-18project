@@ -11,6 +11,13 @@ namespace TravelCompanyImplementation
 {
     public class ReadOnlyTravelCompany : IReadOnlyTravelCompany
     {
+        private readonly string Name, travelCompanyConnectionString;
+        public ReadOnlyTravelCompany(string name, string travelCompanyConnectionString)
+        {
+            this.Name = name;
+            this.travelCompanyConnectionString = travelCompanyConnectionString;
+        }
+
         public ReadOnlyCollection<ILegDTO> FindLegs(Expression<Func<ILegDTO, bool>> predicate)
         {
             throw new NotImplementedException();

@@ -37,7 +37,6 @@ namespace TravelCompanyImplementation
                 if(!brokerDBContext.Database.Exists())
                     throw new NonexistentObjectException();
             }
-
             return new TravelCompanyBroker(dbConnectionString);
         }
     }
