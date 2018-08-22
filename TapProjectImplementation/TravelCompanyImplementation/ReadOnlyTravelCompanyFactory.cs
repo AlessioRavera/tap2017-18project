@@ -24,14 +24,20 @@ namespace TravelCompanyImplementation
             UtilityClass.CheckNotEmpty(name);
             UtilityClass.CheckNameLength(name);
             UtilityClass.CheckOnlyAlphanumChar(name);
-            using (var brokerDBContext = new TravelCompanyBrokerContext(dbConnectionString))
+            try
             {
-                var query = from tc in brokerDBContext.travelCompanies
-                    where tc.TravelCompanyName == name
-                    select tc.TravelCompanyConnectionString;
-                if (!query.Any())
-                    throw new NonexistentTravelCompanyException();
-                return new ReadOnlyTravelCompany(name, query.FirstOrDefault());
+                using (var brokerDBContext = new TravelCompanyBrokerContext(dbConnectionString))
+                {
+                    var TCConnString = (from tc in brokerDBContext.travelCompanies
+                        where tc.TravelCompanyName == name
+                        select tc.TravelCompanyConnectionString).Single();
+                    return new ReadOnlyTravelCompany(name, TCConnString);
+                }
+
+            }
+            catch (InvalidOperationException)
+            {
+                throw new NonexistentTravelCompanyException();
             }
         }
     }

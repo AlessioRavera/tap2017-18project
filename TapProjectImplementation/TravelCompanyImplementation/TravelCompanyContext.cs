@@ -4,10 +4,11 @@ using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TAP2017_2018_TravelCompanyInterface;
 
 namespace TravelCompanyImplementation
 {
-    class TravelCompanyContext : DbContext
+    public class TravelCompanyContext : DbContext
     {
         public DbSet<LegDB> legs { get; set; }
 
@@ -19,8 +20,7 @@ namespace TravelCompanyImplementation
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<LegDB>().HasIndex(p => new {p.Cost, p.Distance, p.From, p.To, p.transportType});
+            modelBuilder.Entity<LegDB>().HasIndex(p => new {p.Cost, p.Distance, p.From, p.To, p.TransportT});
         }
     }
 }

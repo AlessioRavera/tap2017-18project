@@ -36,7 +36,7 @@ namespace Utility
                 throw new ArgumentException();
         }
 
-        public static void CheckOnlyAlphanumChar(String s)
+        public static void CheckOnlyAlphanumChar(string s)
         {
             Regex r = new Regex("^[a-zA-Z0-9]*$");
             if (!r.IsMatch(s))
@@ -44,6 +44,25 @@ namespace Utility
                 throw new ArgumentException();
             }
         }
+
+        public static void CheckStrictlyPositive(int val)
+        {
+            if(val <= 0)
+                throw new ArgumentException();
+        }
+
+        public static void CheckTransportType(TransportType t)
+        {
+            if (t==TransportType.None)
+                throw new ArgumentException();
+        }
+
+        public static void CheckNotEquals(string s1, string s2)
+        {
+            if(s1==s2)
+                throw  new ArgumentException();
+        }
+
 
     }
 }

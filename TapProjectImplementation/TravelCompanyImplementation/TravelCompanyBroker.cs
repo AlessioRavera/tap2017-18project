@@ -38,23 +38,19 @@ namespace TravelCompanyImplementation
                     travelCompanies.Add(item);
                 return new ReadOnlyCollection<string>(travelCompanies);
             }
+            
         }
 
         public override bool Equals(object obj)
         {
-            var item = obj as TravelCompanyBroker;
-
-            if (item == null)
-            {
-                return false;
-            }
-
-            return this.dbConnectionString.Equals(item.dbConnectionString);
+            var broker = obj as TravelCompanyBroker;
+            return broker != null &&
+                   dbConnectionString == broker.dbConnectionString;
         }
 
         public override int GetHashCode()
         {
-            return this.dbConnectionString.GetHashCode();
+            return 758876710 + EqualityComparer<string>.Default.GetHashCode(dbConnectionString);
         }
     }
 }
