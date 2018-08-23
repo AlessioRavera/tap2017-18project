@@ -57,6 +57,9 @@
     <Reference Include="TravelCompanyImplementation">
       <HintPath>..\TravelCompanyImplementation\obj\Debug\TravelCompanyImplementation.dll</HintPath>
     </Reference>
+    <Reference Include="Utility">
+      <HintPath>..\Utility\bin\Debug\Utility.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BasicTestInitializer.cs" />

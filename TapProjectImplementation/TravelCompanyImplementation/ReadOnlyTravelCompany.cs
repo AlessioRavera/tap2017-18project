@@ -60,7 +60,7 @@ namespace TravelCompanyImplementation
                 {
                     List<ILegDTO> legsDTO = new List<ILegDTO>();
                     var elementsLegDb = from l in travelCompanyDBContext.legs
-                        where(l.From == @from && l.TransportT == allowedTransportTypes)
+                        where(l.From == @from && allowedTransportTypes.HasFlag(l.TransportT))
                         select l;
 
                     foreach (var leg in elementsLegDb)
@@ -76,7 +76,7 @@ namespace TravelCompanyImplementation
                 throw new NotImplementedException();
             }
             
-        }
+        } 
         public override bool Equals(object obj)
         {
             var company = obj as ReadOnlyTravelCompany;

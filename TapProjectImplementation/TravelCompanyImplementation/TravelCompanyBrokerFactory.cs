@@ -19,6 +19,7 @@ namespace TravelCompanyImplementation
             UtilityClass.CheckNotNull(dbConnectionString);
             UtilityClass.CheckNotEmpty(dbConnectionString);
             UtilityClass.CheckConnectionStringLength(dbConnectionString);
+
             using (var brokerDBContext = new TravelCompanyBrokerContext(dbConnectionString))
             {
                 brokerDBContext.Database.Delete();
