@@ -14,7 +14,7 @@ namespace TravelCompanyImplementation
     public class ReadOnlyTravelCompany : IReadOnlyTravelCompany
     {
         private readonly string Name, travelCompanyConnectionString;
-        public ReadOnlyTravelCompany(string name, string travelCompanyConnectionString)
+        internal ReadOnlyTravelCompany(string name, string travelCompanyConnectionString)
         {
             this.Name = name;
             this.travelCompanyConnectionString = travelCompanyConnectionString;
@@ -40,9 +40,9 @@ namespace TravelCompanyImplementation
                 }
 
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                throw new NotImplementedException();
+                throw new DbConnectionException(e.Message,e);
             }
         }
 
@@ -67,15 +67,15 @@ namespace TravelCompanyImplementation
                     {
                         legsDTO.Add(new LegDTO(leg.From,leg.To, leg.Distance, leg.Cost,leg.TransportT));
                     }
-                    return new ReadOnlyCollection<ILegDTO>(legsDTO);
+                    return legsDTO.AsReadOnly();
                 }
                 
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                throw new NotImplementedException();
+                throw new DbConnectionException(e.Message, e);
             }
-            
+
         } 
         public override bool Equals(object obj)
         {

@@ -7,9 +7,9 @@ using TAP2017_2018_TravelCompanyInterface;
 
 namespace TravelCompanyImplementation
 {
-    class LegDTO : ILegDTO
+    internal class LegDTO : ILegDTO
     {
-        public LegDTO(string from, string to, int distance, int cost, TransportType type)
+        internal LegDTO(string from, string to, int distance, int cost, TransportType type)
         {
             this.From = from;
             this.To = to;

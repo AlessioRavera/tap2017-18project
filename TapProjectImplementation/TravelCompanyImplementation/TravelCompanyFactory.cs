@@ -12,9 +12,9 @@ namespace TravelCompanyImplementation
 {
     public class TravelCompanyFactory : ITravelCompanyFactory
     {
-        private string dbConnectionString;
+        private readonly string dbConnectionString;
 
-        public TravelCompanyFactory(string dbConnectionString)
+        internal TravelCompanyFactory(string dbConnectionString)
         {
             this.dbConnectionString = dbConnectionString;
         }
@@ -28,6 +28,7 @@ namespace TravelCompanyImplementation
             UtilityClass.CheckConnectionStringLength(travelCompanyConnectionString);
             UtilityClass.CheckNameLength(name);
             UtilityClass.CheckOnlyAlphanumChar(name);
+
             try
             {
                 using (var brokerDBContext = new TravelCompanyBrokerContext(dbConnectionString))
@@ -37,13 +38,16 @@ namespace TravelCompanyImplementation
                         TravelCompanyName = name,
                         TravelCompanyConnectionString = travelCompanyConnectionString
                     };
+
                     brokerDBContext.travelCompanies.Add(travelCompany);
                     brokerDBContext.SaveChanges();
-                    using (var travelCompanyDBContext= new TravelCompanyContext(travelCompanyConnectionString))
+
+                    using (var travelCompanyDBContext = new TravelCompanyContext(travelCompanyConnectionString))
                     {
                         travelCompanyDBContext.Database.Delete();
                         travelCompanyDBContext.Database.Create();
                     }
+
                     return new TravelCompany(name, travelCompanyConnectionString);
                 }
 
@@ -54,7 +58,12 @@ namespace TravelCompanyImplementation
                 {
                     throw new TapDuplicatedObjectException();
                 }
+
                 throw new SameConnectionStringException();
+            }
+            catch (Exception e)
+            {
+                throw new DbConnectionException(e.Message, e);
             }
 
         }
@@ -65,20 +74,26 @@ namespace TravelCompanyImplementation
             UtilityClass.CheckNotEmpty(name);
             UtilityClass.CheckNameLength(name);
             UtilityClass.CheckOnlyAlphanumChar(name);
+
             try
             {
                 using (var brokerDBContext = new TravelCompanyBrokerContext(dbConnectionString))
                 {
                     var TCConnString = (from tc in brokerDBContext.travelCompanies
                         where tc.TravelCompanyName == name
-                        select tc.TravelCompanyConnectionString).Single();    
-                    return new TravelCompany(name,TCConnString);
+                        select tc.TravelCompanyConnectionString).Single();
+
+                    return new TravelCompany(name, TCConnString);
                 }
 
             }
             catch (InvalidOperationException)
             {
                 throw new NonexistentTravelCompanyException();
+            }
+            catch (Exception e)
+            {
+                throw new DbConnectionException(e.Message, e);
             }
 
         }

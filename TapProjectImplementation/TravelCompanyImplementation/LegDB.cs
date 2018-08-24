@@ -18,8 +18,10 @@ namespace TravelCompanyImplementation
         [StringLength(DomainConstraints.NameMaxLength, MinimumLength = DomainConstraints.NameMinLength)]
         public string To { get; set; }
         [Column]
+        [Range(1, int.MaxValue)]
         public int Cost { get; set; }
         [Column]
+        [Range(1, int.MaxValue)]
         public int Distance { get; set; }
         [Column]
         public TransportType TransportT { get; set; }

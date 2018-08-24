@@ -20,12 +20,21 @@ namespace TravelCompanyImplementation
             UtilityClass.CheckNotEmpty(dbConnectionString);
             UtilityClass.CheckConnectionStringLength(dbConnectionString);
 
-            using (var brokerDBContext = new TravelCompanyBrokerContext(dbConnectionString))
+            try
             {
-                brokerDBContext.Database.Delete();
-                brokerDBContext.Database.Create();
+                using (var brokerDBContext = new TravelCompanyBrokerContext(dbConnectionString))
+                {
+                    brokerDBContext.Database.Delete();
+                    brokerDBContext.Database.Create();
+                }
+
+                return new TravelCompanyBroker(dbConnectionString);
             }
-            return new TravelCompanyBroker(dbConnectionString);
+            catch (Exception e)
+            {
+                throw new DbConnectionException(e.Message,e);
+            }
+            
         }
 
         public ITravelCompanyBroker GetBroker(string dbConnectionString)
@@ -33,12 +42,26 @@ namespace TravelCompanyImplementation
             UtilityClass.CheckNotNull(dbConnectionString);
             UtilityClass.CheckNotEmpty(dbConnectionString);
             UtilityClass.CheckConnectionStringLength(dbConnectionString);
-            using (var brokerDBContext = new TravelCompanyBrokerContext(dbConnectionString))
+
+            try
             {
-                if(!brokerDBContext.Database.Exists())
-                    throw new NonexistentObjectException();
+                using (var brokerDBContext = new TravelCompanyBrokerContext(dbConnectionString))
+                {
+                    if (!brokerDBContext.Database.Exists())
+                        throw new NonexistentObjectException();
+                }
+
+                return new TravelCompanyBroker(dbConnectionString);
             }
-            return new TravelCompanyBroker(dbConnectionString);
+            
+            catch (NonexistentObjectException e)
+            {
+                throw e;
+            }
+            catch (Exception e)
+            {
+                throw new DbConnectionException(e.Message,e);
+            }
         }
     }
 

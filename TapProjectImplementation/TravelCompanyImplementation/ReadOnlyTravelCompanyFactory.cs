@@ -11,9 +11,9 @@ namespace TravelCompanyImplementation
 {
     public class ReadOnlyTravelCompanyFactory : IReadOnlyTravelCompanyFactory
     {
-        private string dbConnectionString;
+        private readonly string dbConnectionString;
 
-        public ReadOnlyTravelCompanyFactory(string dbConnectionString)
+        internal ReadOnlyTravelCompanyFactory(string dbConnectionString)
         {
             this.dbConnectionString = dbConnectionString;
         }
@@ -24,6 +24,7 @@ namespace TravelCompanyImplementation
             UtilityClass.CheckNotEmpty(name);
             UtilityClass.CheckNameLength(name);
             UtilityClass.CheckOnlyAlphanumChar(name);
+
             try
             {
                 using (var brokerDBContext = new TravelCompanyBrokerContext(dbConnectionString))
@@ -31,13 +32,17 @@ namespace TravelCompanyImplementation
                     var TCConnString = (from tc in brokerDBContext.travelCompanies
                         where tc.TravelCompanyName == name
                         select tc.TravelCompanyConnectionString).Single();
+
                     return new ReadOnlyTravelCompany(name, TCConnString);
                 }
-
             }
             catch (InvalidOperationException)
             {
                 throw new NonexistentTravelCompanyException();
+            }
+            catch (Exception e)
+            {
+                throw new DbConnectionException(e.Message,e);
             }
         }
     }

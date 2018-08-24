@@ -20,7 +20,7 @@ namespace TravelCompanyImplementation
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<LegDB>().HasIndex(p => new {p.Cost, p.Distance, p.From, p.To, p.TransportT});
+            modelBuilder.Entity<LegDB>().HasIndex(p => new {p.Cost, p.Distance, p.From, p.To, p.TransportT}).IsUnique();
         }
     }
 }

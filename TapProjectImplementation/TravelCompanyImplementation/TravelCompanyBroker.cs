@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TAP2017_2018_TravelCompanyInterface;
+using TAP2017_2018_TravelCompanyInterface.Exceptions;
 
 namespace TravelCompanyImplementation
 {
@@ -12,7 +13,7 @@ namespace TravelCompanyImplementation
     {
         private readonly string dbConnectionString;
 
-        public TravelCompanyBroker(string dbConnectionString)
+        internal TravelCompanyBroker(string dbConnectionString)
         {
             this.dbConnectionString = dbConnectionString;
         }
@@ -29,15 +30,27 @@ namespace TravelCompanyImplementation
 
         public ReadOnlyCollection<string> KnownTravelCompanies()
         {
-            using (var brokerDBContext = new TravelCompanyBrokerContext(dbConnectionString))
+
+            try
             {
-                List<string> travelCompanies = new List<string>();
-                var query = from tc in brokerDBContext.travelCompanies
-                    select tc.TravelCompanyName;
-                foreach (var item in query)
-                    travelCompanies.Add(item);
-                return new ReadOnlyCollection<string>(travelCompanies);
+                using (var brokerDBContext = new TravelCompanyBrokerContext(dbConnectionString))
+                {
+                    List<string> travelCompanies = new List<string>();
+
+                    var query = from tc in brokerDBContext.travelCompanies
+                        select tc.TravelCompanyName;
+
+                    foreach (var item in query)
+                        travelCompanies.Add(item);
+
+                    return travelCompanies.AsReadOnly();
+                }
             }
+            catch (Exception e)
+            {
+                throw new DbConnectionException(e.Message,e);
+            }
+           
             
         }
 

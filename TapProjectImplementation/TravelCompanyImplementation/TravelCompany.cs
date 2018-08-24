@@ -12,9 +12,9 @@ namespace TravelCompanyImplementation
 {
     public class TravelCompany : ITravelCompany
     {
-        private string travelCompanyConnectionString;
+        private readonly string travelCompanyConnectionString;
 
-        public TravelCompany(string name, string travelCompanyConnectionString)
+        internal TravelCompany(string name, string travelCompanyConnectionString)
         {
             Name = name;
             this.travelCompanyConnectionString = travelCompanyConnectionString;
@@ -32,6 +32,7 @@ namespace TravelCompanyImplementation
             UtilityClass.CheckStrictlyPositive(cost);
             UtilityClass.CheckStrictlyPositive(distance);
             UtilityClass.CheckTransportType(transportType);
+
             try
             {
                 using (var travelCompanyDBContext = new TravelCompanyContext(travelCompanyConnectionString))
@@ -49,9 +50,9 @@ namespace TravelCompanyImplementation
                     return l.LegID;
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                throw new NotImplementedException();
+                throw new DbConnectionException(e.Message,e);
             }
            
         }
@@ -65,6 +66,7 @@ namespace TravelCompanyImplementation
                     var elementLegDb = (from l in travelCompanyDBContext.legs
                         where l.LegID == legToBeRemovedId
                         select l).Single();
+
                     travelCompanyDBContext.legs.Remove(elementLegDb);
                     travelCompanyDBContext.SaveChanges();
                 }
@@ -72,6 +74,10 @@ namespace TravelCompanyImplementation
             catch (InvalidOperationException)
             {
                 throw new NonexistentObjectException();
+            }
+            catch(Exception e)
+            {
+                throw new DbConnectionException(e.Message, e);
             }
 
         }
@@ -87,14 +93,17 @@ namespace TravelCompanyImplementation
                         select l).Single();
 
                     return new LegDTO(elemLegDb.From, elemLegDb.To, elemLegDb.Distance, elemLegDb.Cost, elemLegDb.TransportT);
-
                 }
             }
             catch (InvalidOperationException)
             {
                 throw new NonexistentObjectException();
             }
-            
+            catch (Exception e)
+            {
+                throw new DbConnectionException(e.Message, e);
+            }
+
         }
 
         public string Name { get; }
