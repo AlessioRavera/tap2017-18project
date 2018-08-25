@@ -11,7 +11,7 @@ namespace PlannerImplementation
     {
         public IPlanner CreateNew()
         {
-            throw new NotImplementedException();
+            return new Planner();
         }
     }
 }
