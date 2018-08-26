@@ -68,6 +68,7 @@
     <Compile Include="PlannerFactoryTestSuite.cs" />
     <Compile Include="PlannerTestInitializer.cs" />
     <Compile Include="PlannerTestSuite.cs" />
+    <Compile Include="PrivatePlannerTestSuite.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
