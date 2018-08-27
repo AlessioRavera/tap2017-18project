@@ -41,30 +41,30 @@ namespace PlannerImplementation
         }
 
         public ITrip FindTrip(string source, string destination, FindOptions options, TransportType allowedTransportTypes)
-        {
-            Dictionary<string, Tuple<int, ILegDTO>> CityNodesDictionary = new Dictionary<string, Tuple<int, ILegDTO>>();
-            Dictionary<string, int> CityNodeNOT_Visited = new Dictionary<string, int>();
-            HashSet<string> CityNodeVisited = new HashSet<string>();
-            CityNodesDictionary.Add(source,new Tuple<int, ILegDTO>(0,null));
-            CityNodeNOT_Visited.Add(source, 0);
-            
+        {   
+            Dictionary<string,(int Cost, ILegDTO LegUsedToBeReahed)> cityNodesDictionary = new Dictionary<string,ValueTuple<int,ILegDTO>>();
+            List<(string CityName,int Cost)> citysNotVisited = new List<ValueTuple<string, int>>();
+            HashSet<string> citysVisited = new HashSet<string>();
 
-            while (CityNodeNOT_Visited.Any())
+            cityNodesDictionary.Add(source, (0, null));
+            citysNotVisited.Add((source, 0));
+
+            while (citysNotVisited.Any())
             {
-                var cityVisiting = CityNodeNOT_Visited.Aggregate((l, r) => l.Value < r.Value ? l : r); 
-                CityNodeNOT_Visited.Remove(cityVisiting.Key);
-                CityNodeVisited.Add(cityVisiting.Key);
+                var cityVisiting = citysNotVisited.First();
+                citysNotVisited.RemoveAt(0);
+                citysVisited.Add(cityVisiting.CityName);
 
-                if (cityVisiting.Key == destination) 
-                    return GetBestTrip(CityNodesDictionary, source, destination);
+                if (cityVisiting.CityName == destination)
+                    return GetBestTrip(cityNodesDictionary, source, destination);
 
-                int costToReachCity = cityVisiting.Value; 
-                foreach (var TravelCompany in TravelCompanySet)
+                int costToReachCity = cityVisiting.Cost;
+                foreach (var travelCompany in TravelCompanySet)
                 {
-                    var legsOfTravelCompanyFromCity = TravelCompany.FindDepartures(cityVisiting.Key, allowedTransportTypes);
+                    var legsOfTravelCompanyFromCity = travelCompany.FindDepartures(cityVisiting.CityName, allowedTransportTypes);
                     foreach (var leg in legsOfTravelCompanyFromCity)
                     {
-                        if (!CityNodeVisited.Contains(leg.To))
+                        if (!citysVisited.Contains(leg.To))
                         {
                             int legCost = 0;
                             switch (options)
@@ -81,43 +81,42 @@ namespace PlannerImplementation
                                     legCost++;
                                     break;
                             }
-                            if(CityNodesDictionary.ContainsKey(leg.To))
+                            if (cityNodesDictionary.ContainsKey(leg.To))
                             {
-                                
-                                if ((costToReachCity + legCost) < CityNodesDictionary[leg.To].Item1)
-                                {  
-                                    CityNodesDictionary.Remove(leg.To);
-                                    CityNodesDictionary.Add(leg.To,new Tuple<int, ILegDTO>(costToReachCity+legCost,leg));
-                                    CityNodeNOT_Visited[leg.To] = costToReachCity + legCost;
+
+                                if ((costToReachCity + legCost) < cityNodesDictionary[leg.To].Cost)
+                                {
+                                    cityNodesDictionary[leg.To] = (costToReachCity + legCost, leg);
+                                    int index = citysNotVisited.FindIndex(c => c.CityName.Equals(leg.To));
+                                    citysNotVisited[index] = (leg.To, costToReachCity + legCost);
                                 }
 
                             }
                             else
                             {
-                                CityNodesDictionary.Add(leg.To,new Tuple<int, ILegDTO>(costToReachCity+legCost,leg));
-                                CityNodeNOT_Visited.Add(leg.To, costToReachCity + legCost);
+                                cityNodesDictionary.Add(leg.To, (costToReachCity + legCost, leg));
+                                citysNotVisited.Add((leg.To, costToReachCity + legCost));
                             }
+                            citysNotVisited.Sort((x, y) => x.Cost.CompareTo(y.Cost));
                         }
-
-                            
                     }
                 }
             }
-            return null; 
+            return null;
         }
 
-        private ITrip GetBestTrip(Dictionary<string, Tuple<int, ILegDTO>> CityNodesDictionary, string sourceName, string destinationName)
+        private ITrip GetBestTrip(Dictionary<string, (int Cost, ILegDTO LegUsedToBeReahed)> cityNodesDictionary, string sourceName, string destinationName)
         {
             List <ILegDTO> finalPath= new List<ILegDTO>();
             int totalCost=0, totalDistance=0;
             string cursorCityName = destinationName;
-            while (!(CityNodesDictionary[cursorCityName].Item2 is null))
+            while (!(cityNodesDictionary[cursorCityName].LegUsedToBeReahed is null))
             {
 
-                finalPath.Add(CityNodesDictionary[cursorCityName].Item2);
-                totalCost += CityNodesDictionary[cursorCityName].Item2.Cost;
-                totalDistance += CityNodesDictionary[cursorCityName].Item2.Distance;
-                cursorCityName = CityNodesDictionary[cursorCityName].Item2.From;
+                finalPath.Add(cityNodesDictionary[cursorCityName].LegUsedToBeReahed);
+                totalCost += cityNodesDictionary[cursorCityName].LegUsedToBeReahed.Cost;
+                totalDistance += cityNodesDictionary[cursorCityName].LegUsedToBeReahed.Distance;
+                cursorCityName = cityNodesDictionary[cursorCityName].LegUsedToBeReahed.From;
             }
 
             finalPath.Reverse();
