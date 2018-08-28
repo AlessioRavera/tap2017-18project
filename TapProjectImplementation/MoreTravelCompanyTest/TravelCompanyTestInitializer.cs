@@ -1,8 +1,7 @@
 ﻿using NUnit.Framework;
 using TAP2017_2018_TravelCompanyInterface;
 
-
-namespace TAP2017_2018_TravelCompanyTests
+namespace MoreTravelCompanyTest
 {
     [TestFixture()]
     public class TravelCompanyTestInitializer : BrokerTestInitializer

@@ -18,7 +18,7 @@ namespace TAP2017_2018_TravelCompanyTests
         protected string ExampleConnectionString= BasicTestInitializer.CreateConnectionString("TCITravel");
         protected string ExampleConnectionString2= BasicTestInitializer.CreateConnectionString("differentTC2");
         protected string ExampleName = "TestTravelCompany";
-        internal const string ImplementationAssembly = @"..\..\..\TapProjectImplementation\TravelCompanyImplementation\bin\Debug\TravelCompanyImplementation.dll";
+        internal const string ImplementationAssembly = @"..\..\..\TravelCompanyImplementation\bin\Debug\TravelCompanyImplementation.dll";
 
         public BasicTestInitializer(){
             var kernel = new StandardKernel();

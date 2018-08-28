@@ -16,7 +16,7 @@ namespace TAP2017_2018_TravelCompanyTests
         public void CreateNewBrokerReturnsOk()
         {
             var br = brokerFactory.CreateNewBroker(ExampleConnectionString);
-            Assert.Pass();
+            Assert.Pass();  
         }
 
         [Test]

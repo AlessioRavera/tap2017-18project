@@ -1,5 +1,7 @@
 ﻿using NUnit.Framework;
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using TAP2017_2018_TravelCompanyInterface;
 
 namespace TAP2017_2018_TravelCompanyTests

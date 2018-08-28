@@ -1,22 +1,68 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TAP2017_2018_TravelCompanyInterface;
+using TAP2017_2018_TravelCompanyInterface.Exceptions;
+using Utility;
 
 namespace TravelCompanyImplementation
 {
-    class TravelCompanyBrokerFactory : ITravelCompanyBrokerFactory
+    public class TravelCompanyBrokerFactory : ITravelCompanyBrokerFactory
     {
         public ITravelCompanyBroker CreateNewBroker(string dbConnectionString)
         {
-            throw new NotImplementedException();
+            UtilityClass.CheckNotNull(dbConnectionString);
+            UtilityClass.CheckNotEmpty(dbConnectionString);
+            UtilityClass.CheckConnectionStringLength(dbConnectionString);
+
+            try
+            {
+                using (var brokerDBContext = new TravelCompanyBrokerContext(dbConnectionString))
+                {
+                    brokerDBContext.Database.Delete();
+                    brokerDBContext.Database.Create();
+                }
+
+                return new TravelCompanyBroker(dbConnectionString);
+            }
+            catch (Exception e)
+            {
+                throw new DbConnectionException(e.Message,e);
+            }
+            
         }
 
         public ITravelCompanyBroker GetBroker(string dbConnectionString)
         {
-            throw new NotImplementedException();
+            UtilityClass.CheckNotNull(dbConnectionString);
+            UtilityClass.CheckNotEmpty(dbConnectionString);
+            UtilityClass.CheckConnectionStringLength(dbConnectionString);
+
+            try
+            {
+                using (var brokerDBContext = new TravelCompanyBrokerContext(dbConnectionString))
+                {
+                    if (!brokerDBContext.Database.Exists())
+                        throw new NonexistentObjectException();
+                }
+
+                return new TravelCompanyBroker(dbConnectionString);
+            }
+            
+            catch (NonexistentObjectException e)
+            {
+                throw e;
+            }
+            catch (Exception e)
+            {
+                throw new DbConnectionException(e.Message,e);
+            }
         }
     }
+
 }

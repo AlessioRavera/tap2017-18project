@@ -5,24 +5,65 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TAP2017_2018_TravelCompanyInterface;
+using TAP2017_2018_TravelCompanyInterface.Exceptions;
 
 namespace TravelCompanyImplementation
 {
-    class TravelCompanyBroker : ITravelCompanyBroker
+    public class TravelCompanyBroker : ITravelCompanyBroker
     {
+        private readonly string dbConnectionString;
+
+        internal TravelCompanyBroker(string dbConnectionString)
+        {
+            this.dbConnectionString = dbConnectionString;
+        }
+
         public ITravelCompanyFactory GetTravelCompanyFactory()
         {
-            throw new NotImplementedException();
+            return new TravelCompanyFactory(dbConnectionString);
         }
 
         public IReadOnlyTravelCompanyFactory GetReadOnlyTravelCompanyFactory()
         {
-            throw new NotImplementedException();
+            return new ReadOnlyTravelCompanyFactory(dbConnectionString);
         }
 
         public ReadOnlyCollection<string> KnownTravelCompanies()
         {
-            throw new NotImplementedException();
+
+            try
+            {
+                using (var brokerDBContext = new TravelCompanyBrokerContext(dbConnectionString))
+                {
+                    List<string> travelCompanies = new List<string>();
+
+                    var query = from tc in brokerDBContext.travelCompanies
+                        select tc.TravelCompanyName;
+
+                    foreach (var item in query)
+                        travelCompanies.Add(item);
+
+                    return travelCompanies.AsReadOnly();
+                }
+            }
+            catch (Exception e)
+            {
+                throw new DbConnectionException(e.Message,e);
+            }
+           
+            
+        }
+
+        public override bool Equals(object obj)
+        {
+            var broker = obj as TravelCompanyBroker;
+            return broker != null &&
+                   dbConnectionString == broker.dbConnectionString;
+        }
+
+        public override int GetHashCode()
+        {
+            return 758876710 + EqualityComparer<string>.Default.GetHashCode(dbConnectionString);
         }
     }
 }
