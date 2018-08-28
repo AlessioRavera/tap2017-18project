@@ -35,7 +35,7 @@ namespace TravelCompanyImplementation
             }
             catch (InvalidOperationException)
             {
-                throw new NonexistentTravelCompanyException();
+                throw new NonexistentObjectException();
             }
             catch (Exception e)
             {

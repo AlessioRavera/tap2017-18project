@@ -5,6 +5,7 @@ using PlannerTest;
 using TAP2017_2018_PlannerInterface;
 using TAP2017_2018_TravelCompanyInterface;
 using TAP2017_2018_TravelCompanyInterface.Exceptions;
+using Utility;
 
 namespace PlannerImplementation
 {
@@ -41,21 +42,30 @@ namespace PlannerImplementation
         }
 
         public ITrip FindTrip(string source, string destination, FindOptions options, TransportType allowedTransportTypes)
-        {   
+        {
+            UtilityClass.CheckNotNull(source);
+            UtilityClass.CheckNotNull(destination);
+            UtilityClass.CheckOnlyAlphanumChar(source);
+            UtilityClass.CheckOnlyAlphanumChar(destination);
+            UtilityClass.CheckNameLength(source);
+            UtilityClass.CheckNameLength(destination);
+            UtilityClass.CheckTransportType(allowedTransportTypes);
+
+
             Dictionary<string,(int Cost, ILegDTO LegUsedToBeReahed)> cityNodesDictionary = new Dictionary<string,ValueTuple<int,ILegDTO>>();
             List<(string CityName,int Cost)> citysNotVisited = new List<ValueTuple<string, int>>();
             HashSet<string> citysVisited = new HashSet<string>();
 
             cityNodesDictionary.Add(source, (0, null));
             citysNotVisited.Add((source, 0));
-
+          
             while (citysNotVisited.Any())
             {
                 var cityVisiting = citysNotVisited.First();
                 citysNotVisited.RemoveAt(0);
                 citysVisited.Add(cityVisiting.CityName);
 
-                if (cityVisiting.CityName == destination)
+                if (cityVisiting.CityName.Equals(destination))
                     return GetBestTrip(cityNodesDictionary, source, destination);
 
                 int costToReachCity = cityVisiting.Cost;

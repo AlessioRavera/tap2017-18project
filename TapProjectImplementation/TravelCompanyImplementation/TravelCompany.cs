@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using TAP2017_2018_TravelCompanyInterface;
 using TAP2017_2018_TravelCompanyInterface.Exceptions;
@@ -34,18 +35,22 @@ namespace TravelCompanyImplementation
             {
                 using (var travelCompanyDBContext = new TravelCompanyContext(travelCompanyConnectionString))
                 {
-                    var leg= new LegDB()
+                    var leg = new LegDB()
                     {
                         From = from,
                         To = to,
                         Cost = cost,
                         Distance = distance,
-                        TransportT = transportType 
+                        TransportT = transportType
                     };
                     var l = travelCompanyDBContext.legs.Add(leg);
                     travelCompanyDBContext.SaveChanges();
                     return l.LegID;
                 }
+            }
+            catch (DbUpdateException)
+            {
+                throw new TapDuplicatedObjectException(); 
             }
             catch (Exception e)
             {
