@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 using TAP2017_2018_TravelCompanyInterface;
 using TAP2017_2018_TravelCompanyInterface.Exceptions;
 using Utility;
@@ -13,18 +11,18 @@ namespace TravelCompanyImplementation
 {
     public class ReadOnlyTravelCompany : IReadOnlyTravelCompany
     {
-        private readonly string Name, travelCompanyConnectionString;
+        private readonly string Name, TravelCompanyConnectionString;
         internal ReadOnlyTravelCompany(string name, string travelCompanyConnectionString)
         {
             this.Name = name;
-            this.travelCompanyConnectionString = travelCompanyConnectionString;
+            this.TravelCompanyConnectionString = travelCompanyConnectionString;
         }
 
         public ReadOnlyCollection<ILegDTO> FindLegs(Expression<Func<ILegDTO, bool>> predicate)
         {
             try
             {
-                using (var travelCompanyDBContext = new TravelCompanyContext(travelCompanyConnectionString))
+                using (var travelCompanyDBContext = new TravelCompanyContext(TravelCompanyConnectionString))
                 {
                     List<ILegDTO> legsDTO = new List<ILegDTO>();
                     var elementsLegDb = from l in travelCompanyDBContext.legs
@@ -56,7 +54,7 @@ namespace TravelCompanyImplementation
 
             try
             {
-                using (var travelCompanyDBContext = new TravelCompanyContext(travelCompanyConnectionString))
+                using (var travelCompanyDBContext = new TravelCompanyContext(TravelCompanyConnectionString))
                 {
                     List<ILegDTO> legsDTO = new List<ILegDTO>();
                     var elementsLegDb = from l in travelCompanyDBContext.legs
@@ -82,14 +80,14 @@ namespace TravelCompanyImplementation
             var company = obj as ReadOnlyTravelCompany;
             return company != null &&
                    Name == company.Name &&
-                   travelCompanyConnectionString == company.travelCompanyConnectionString;
+                   TravelCompanyConnectionString == company.TravelCompanyConnectionString;
         }
 
         public override int GetHashCode()
         {
             var hashCode = 874148471;
             hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Name);
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(travelCompanyConnectionString);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(TravelCompanyConnectionString);
             return hashCode;
         }
     }

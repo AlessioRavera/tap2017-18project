@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using TAP2017_2018_TravelCompanyInterface;
 
 namespace TravelCompanyImplementation
@@ -26,13 +22,13 @@ namespace TravelCompanyImplementation
 
         public override bool Equals(object obj)
         {
-            var dTO = obj as LegDTO;
-            return dTO != null &&
-                   From == dTO.From &&
-                   To == dTO.To &&
-                   Distance == dTO.Distance &&
-                   Cost == dTO.Cost &&
-                   Type == dTO.Type;
+            var DTO = obj as LegDTO;
+            return DTO != null &&
+                   From == DTO.From &&
+                   To == DTO.To &&
+                   Distance == DTO.Distance &&
+                   Cost == DTO.Cost &&
+                   Type == DTO.Type;
         }
 
         public override int GetHashCode()

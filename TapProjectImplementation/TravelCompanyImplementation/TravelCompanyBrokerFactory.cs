@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Data.Entity;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TAP2017_2018_TravelCompanyInterface;
 using TAP2017_2018_TravelCompanyInterface.Exceptions;
 using Utility;
@@ -54,9 +47,9 @@ namespace TravelCompanyImplementation
                 return new TravelCompanyBroker(dbConnectionString);
             }
             
-            catch (NonexistentObjectException e)
+            catch (NonexistentObjectException)
             {
-                throw e;
+                throw;
             }
             catch (Exception e)
             {

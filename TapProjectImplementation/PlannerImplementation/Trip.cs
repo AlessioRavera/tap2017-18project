@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
 using TAP2017_2018_PlannerInterface;
 using TAP2017_2018_TravelCompanyInterface;
 

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Security;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Security;
 using Ninject.Modules;
 using TAP2017_2018_TravelCompanyInterface;
 
