@@ -26,6 +26,9 @@ namespace TravelCompanyImplementation
             UtilityClass.CheckNameLength(name);
             UtilityClass.CheckOnlyAlphanumChar(name);
 
+            if(dbConnectionString.Equals(travelCompanyConnectionString))
+                throw new SameConnectionStringException();
+
             try
             {
                 using (var brokerDBContext = new TravelCompanyBrokerContext(dbConnectionString))
