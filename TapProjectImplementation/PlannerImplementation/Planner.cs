@@ -77,31 +77,16 @@ namespace PlannerImplementation
                     {
                         if (!citysVisited.Contains(leg.To))
                         {
-                            int legCost = 0;
-                            switch (options)
-                            {
-                                case FindOptions.MinimumDistance:
-                                    legCost = leg.Distance;
-                                    break;
-
-                                case FindOptions.MinimumCost:
-                                    legCost = leg.Cost;
-                                    break;
-
-                                case FindOptions.MinimumHops:
-                                    legCost++;
-                                    break;
-                            }
+                            int legCost = GetLegCost(leg,options);
+                            
                             if (cityNodesDictionary.ContainsKey(leg.To))
                             {
-
                                 if ((costToReachCity + legCost) < cityNodesDictionary[leg.To].Cost)
                                 {
                                     cityNodesDictionary[leg.To] = (costToReachCity + legCost, leg);
                                     citysNotVisited.Remove((leg.To, cityNodesDictionary[leg.To].Cost));
                                     citysNotVisited.Add((leg.To, costToReachCity + legCost)); 
                                 }
-
                             }
                             else
                             {
@@ -128,10 +113,29 @@ namespace PlannerImplementation
                 totalDistance += cityNodesDictionary[cursorCityName].LegUsedToBeReahed.Distance;
                 cursorCityName = cityNodesDictionary[cursorCityName].LegUsedToBeReahed.From;
             }
-
             finalPath.Reverse();
             return new Trip(sourceName, destinationName, finalPath.AsReadOnly(), totalCost, totalDistance);
             
+        }
+
+        private int GetLegCost(ILegDTO leg, FindOptions options)
+        {
+            int legCost = 0;
+            switch (options)
+            {
+                case FindOptions.MinimumDistance:
+                    legCost = leg.Distance;
+                    break;
+
+                case FindOptions.MinimumCost:
+                    legCost = leg.Cost;
+                    break;
+
+                case FindOptions.MinimumHops:
+                    legCost++;
+                    break;
+            }
+            return legCost;
         }
     }
 
