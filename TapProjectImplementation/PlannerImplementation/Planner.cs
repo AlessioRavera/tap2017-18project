@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using PlannerTest;
@@ -51,10 +52,10 @@ namespace PlannerImplementation
             UtilityClass.CheckNameLength(destination);
             UtilityClass.CheckTransportType(allowedTransportTypes);
 
-
+            CityCostComparer cityCostComparer = new CityCostComparer();
             Dictionary<string,(int Cost, ILegDTO LegUsedToBeReahed)> cityNodesDictionary = new Dictionary<string,ValueTuple<int,ILegDTO>>();
-            List<(string CityName,int Cost)> citysNotVisited = new List<ValueTuple<string, int>>();
             HashSet<string> citysVisited = new HashSet<string>();
+            SortedSet<(string CityName, int Cost)> citysNotVisited = new SortedSet<ValueTuple<string, int>>(cityCostComparer);
 
             cityNodesDictionary.Add(source, (0, null));
             citysNotVisited.Add((source, 0));
@@ -62,7 +63,7 @@ namespace PlannerImplementation
             while (citysNotVisited.Any())
             {
                 var cityVisiting = citysNotVisited.First();
-                citysNotVisited.RemoveAt(0);
+                citysNotVisited.Remove(cityVisiting);
                 citysVisited.Add(cityVisiting.CityName);
 
                 if (cityVisiting.CityName.Equals(destination))
@@ -97,8 +98,8 @@ namespace PlannerImplementation
                                 if ((costToReachCity + legCost) < cityNodesDictionary[leg.To].Cost)
                                 {
                                     cityNodesDictionary[leg.To] = (costToReachCity + legCost, leg);
-                                    int index = citysNotVisited.FindIndex(c => c.CityName.Equals(leg.To));
-                                    citysNotVisited[index] = (leg.To, costToReachCity + legCost);
+                                    citysNotVisited.Remove((leg.To, cityNodesDictionary[leg.To].Cost));
+                                    citysNotVisited.Add((leg.To, costToReachCity + legCost)); 
                                 }
 
                             }
@@ -107,7 +108,6 @@ namespace PlannerImplementation
                                 cityNodesDictionary.Add(leg.To, (costToReachCity + legCost, leg));
                                 citysNotVisited.Add((leg.To, costToReachCity + legCost));
                             }
-                            citysNotVisited.Sort((x, y) => x.Cost.CompareTo(y.Cost));
                         }
                     }
                 }

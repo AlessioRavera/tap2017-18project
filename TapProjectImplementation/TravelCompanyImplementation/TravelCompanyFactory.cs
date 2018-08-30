@@ -68,7 +68,6 @@ namespace TravelCompanyImplementation
         public ITravelCompany Get(string name)
         {
             UtilityClass.CheckNotNull(name);
-            UtilityClass.CheckNotEmpty(name);
             UtilityClass.CheckNameLength(name);
             UtilityClass.CheckOnlyAlphanumChar(name);
 

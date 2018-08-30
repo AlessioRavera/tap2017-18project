@@ -3,6 +3,7 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq.Expressions;
 using TAP2017_2018_PlannerInterface;
 using TAP2017_2018_TravelCompanyInterface;
@@ -260,9 +261,5 @@ namespace TAP2017_2018_PlannerTests
             Assert.AreEqual(legDTO.Distance, trip.TotalDistance);
             Assert.That(trip.Path, Is.EquivalentTo(new[] { legDTO }));
         }
-
-        
-
-
     }
 }

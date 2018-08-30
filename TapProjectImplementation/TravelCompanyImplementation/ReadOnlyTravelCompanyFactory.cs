@@ -18,7 +18,6 @@ namespace TravelCompanyImplementation
         public IReadOnlyTravelCompany Get(string name)
         {
             UtilityClass.CheckNotNull(name);
-            UtilityClass.CheckNotEmpty(name);
             UtilityClass.CheckNameLength(name);
             UtilityClass.CheckOnlyAlphanumChar(name);
 

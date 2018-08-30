@@ -20,6 +20,9 @@ namespace TravelCompanyImplementation
 
         public ReadOnlyCollection<ILegDTO> FindLegs(Expression<Func<ILegDTO, bool>> predicate)
         {
+            if (predicate is null)
+                throw new ArgumentNullException();
+
             try
             {
                 using (var travelCompanyDBContext = new TravelCompanyContext(TravelCompanyConnectionString))
@@ -48,7 +51,6 @@ namespace TravelCompanyImplementation
         {
             UtilityClass.CheckNotNull(from);
             UtilityClass.CheckOnlyAlphanumChar(from);
-            UtilityClass.CheckNotEmpty(from);
             UtilityClass.CheckNameLength(from);
             UtilityClass.CheckTransportType(allowedTransportTypes);
 

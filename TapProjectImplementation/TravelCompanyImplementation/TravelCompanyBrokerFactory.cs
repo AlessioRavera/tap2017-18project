@@ -10,7 +10,6 @@ namespace TravelCompanyImplementation
         public ITravelCompanyBroker CreateNewBroker(string dbConnectionString)
         {
             UtilityClass.CheckNotNull(dbConnectionString);
-            UtilityClass.CheckNotEmpty(dbConnectionString);
             UtilityClass.CheckConnectionStringLength(dbConnectionString);
 
             try
@@ -33,7 +32,6 @@ namespace TravelCompanyImplementation
         public ITravelCompanyBroker GetBroker(string dbConnectionString)
         {
             UtilityClass.CheckNotNull(dbConnectionString);
-            UtilityClass.CheckNotEmpty(dbConnectionString);
             UtilityClass.CheckConnectionStringLength(dbConnectionString);
 
             try

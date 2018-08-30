@@ -52,6 +52,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CityCostComparer.cs" />
     <Compile Include="Planner.cs" />
     <Compile Include="PlannerBinding.cs" />
     <Compile Include="PlannerFactory.cs" />
